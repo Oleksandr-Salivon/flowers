@@ -27,9 +27,9 @@ export class SummuryComponent implements OnInit {
   }
   getPrice(){
    //return  this.flowerService.getTotallSum()
-   var total:number = 0;
-   this.flowers.forEach(element => {
-     total +=element.price*element.qty;
+      var total:number = 0;
+      this.flowers.forEach(element => {
+      total +=element.price*element.qty;
      
    });
    return total;

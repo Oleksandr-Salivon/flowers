@@ -21,8 +21,8 @@ export class AddFlowersComponent implements OnInit {
   ngOnInit(): void {
   }
   addFlower(content:any){
-    console.log(this.checkId(this.flower));
-    console.log(!!this.flower);
+    // console.log(this.checkId(this.flower));
+    // console.log(!!this.flower);
     
     if (this.checkId(this.flower ) ) {
       this.flowers.push(new Flower( this.flower.id,this.flower.name,this.flower.description,this.flower.price,this.flower.qty,true));

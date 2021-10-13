@@ -16,10 +16,10 @@ export class FlowerService{
         return this.flowers;
     }
     getSummaryFlowers(){
-        this.orderedFlowers.forEach(el=> {
-            console.log("test" + el);
+        // this.orderedFlowers.forEach(el=> {
+        //     console.log("test" + el);
             
-        })
+        // })
         return this.orderedFlowers;
     }
     getFlower(id:number):Flower{
@@ -73,7 +73,7 @@ export class FlowerService{
                     }
                 });
                 element.qty-=1; 
-                this.totallPrice =this.totallPrice +  element.price*element.qty
+                // this.totallPrice =this.totallPrice +  element.price*element.qty
                 if (element.qty <1) {
                     this.orderedFlowers.splice(index,1)
                 }
