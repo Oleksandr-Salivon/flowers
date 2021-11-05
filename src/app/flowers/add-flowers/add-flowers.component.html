@@ -1,0 +1,87 @@
+<div class="alert flower-back addFlower container">
+  <form [formGroup]="myForm" (ngSubmit)="addFlower(content)">
+    <div class="m-2 ">
+      <label class="form-control link-style">Name</label>
+      <input type="text" class="form-control link-style" [formControl]="fname" />
+      <span
+        class="alert alert-danger"
+        *ngIf="fname.valid == false && fname.touched"
+        >Wrong name, lenght > 5 letters</span
+      >
+      <br />
+    </div>
+    <div class="m-2">
+      <label class="form-control link-style">Description</label>
+      <input type="text" class="form-control link-style" [formControl]="fdescr" />
+      <span
+        class="alert alert-danger"
+        *ngIf="fdescr.valid == false && fdescr.touched"
+        >Wrong decription, lenght > 10 letters</span
+      >
+      <br />
+    </div>
+    <div class="m-2">
+      <label class="form-control link-style">Price</label>
+      <input
+        type="number"
+        class="form-control link-style"
+        [formControl]="fprice"
+        min="0"
+      />
+      <span
+        class="alert alert-danger"
+        *ngIf="fprice.valid == false && fprice.touched"
+        >Wrong price format
+      </span>
+      <br />
+    </div>
+    <div class="m-2">
+      <label class="form-control link-style">Quantity</label>
+      <input type="number" class="form-control link-style" [formControl]="fqty" min="1" />
+      <span
+        class="alert alert-danger"
+        *ngIf="fqty.valid == false && fqty.touched"
+        >Wrong qty format</span
+      >
+      <br />
+    </div>
+    <div class="m-2 d-flex justify-content-center">
+      <button class="btn btn-lg btn-primary ">Add Flower</button>
+      <ng-template #content let-modal class="myModal modal-dialog-centered">
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">
+            Bouquet Id not unique
+          </h4>
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group alert-danger">
+              <div>{{ errorMes }}</div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-dark"
+            (click)="modal.close('Save click')"
+          >
+            OK
+          </button>
+        </div>
+      </ng-template>
+    </div>
+
+    <hr />
+
+    <!-- <pre>{{ closeResult }}</pre> -->
+  </form>
+</div>

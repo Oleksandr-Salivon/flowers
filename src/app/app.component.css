@@ -1,0 +1,17 @@
+.link-style{
+    font-size: 1.5em;
+   margin: 2px;
+   border-left: 1px solid #d1d1d3;
+   border-right: 1px solid #d1d1d3;
+   color: #FFFFFF;
+   text-shadow: 0 -1px 4px #FFF, 0 -2px 10px #ff0, 0 -10px 20px #ff8000, 0 -18px 40px #F00;
+}
+.link-style:hover{
+    background-color:  #989899;
+    
+}
+.text-color {
+   
+/* background: #333333; */
+
+}

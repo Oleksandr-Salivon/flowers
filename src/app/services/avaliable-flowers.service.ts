@@ -1,92 +1,95 @@
-import { Flower } from "../models/flowers";
+import { Flower } from '../models/flowers';
 
-export class FlowerService{
-    flowers:Flower[];
-    orderedFlowers:Flower[];
-    totallPrice:number=0;
-    constructor(){
-        this.flowers = [
-            new Flower(101,"White rose","The best white roses",21,3,true),
-            new Flower(102,"Red rose","The best red roses",37,5,true)
-        ]
-        this.orderedFlowers = [ ];
-    }
-    getFlowers(){
-        
-        return this.flowers;
-    }
-    getSummaryFlowers(){
-        // this.orderedFlowers.forEach(el=> {
-        //     console.log("test" + el);
-            
-        // })
-        return this.orderedFlowers;
-    }
-    getFlower(id:number):Flower{
-        var flower:Flower = new Flower( );
-        this.flowers.forEach(element => {
-            if(element.id == id)
-            flower = element;
+export class AvaliableFlowerService {
+  flowers: Flower[];
+  orderedFlowers: Flower[];
+  totallPrice: number = 0;
+  constructor() {
+    this.flowers = [
+      new Flower(101, 'White rose', 'The best white roses', 21, 3, ''),
+      new Flower(102, 'Red rose', 'The best red roses', 37, 5, ''),
+    ];
+    this.orderedFlowers = [];
+  }
+  getFlowers() {
+    return this.flowers;
+  }
+  getSummaryFlowers() {
+    // this.orderedFlowers.forEach(el=> {
+    //     console.log("test" + el);
 
-        });
-        this.orderedFlowers.forEach(el=> {
-            console.log("test" + el);
-            
-        })
-        return flower;
+    // })
+    return this.orderedFlowers;
+  }
+  getFlower(id: number): Flower {
+    var flower: Flower = new Flower();
+    this.flowers.forEach((element) => {
+      if (element.fId == id) flower = element;
+    });
+    this.orderedFlowers.forEach((el) => {
+      console.log('test' + el);
+    });
+    return flower;
+  }
+  addFlower(flower: any) {
+    this.flowers.forEach((element, index) => {
+      if (element.fId == flower.id) {
+        element.fQty -= 1;
+        if (element.fQty < 1) {
+          // element.available=false;
+        }
+      }
+    });
+    this.addFlowerToOrder(flower);
+    return this.flowers;
+  }
+
+  addFlowerToOrder(flower: any) {
+    var element = this.orderedFlowers.find((el) => el.fId == flower.id);
+    if (element) {
+      element.fQty += 1;
+      // element.available=true;
+    } else {
+      this.orderedFlowers.push(
+        new Flower(
+          flower.fid,
+          flower.fname,
+          flower.fdescription,
+          flower.fprice,
+          1,
+          ''
+        )
+      );
     }
-    addFlower(flower:any){
-        this.flowers.forEach((element, index) => {
-            if(element.id == flower.id){
-                element.qty-=1;
-                if (element.qty <1) {
-                    element.available=false;
-                }
+    this.getTotallSum();
+    return this.orderedFlowers;
+  }
+
+  removeFlower(id: any) {
+    this.orderedFlowers.forEach((element, index) => {
+      if (element.fId == id) {
+        this.flowers.forEach((element1) => {
+          if (element1.fId == id) {
+            element1.fQty += 1;
+            if (element1.fQty > 0) {
+              // element1.available=true;
             }
+          }
         });
-        this.addFlowerToOrder(flower);
-        return this.flowers;
-    }
-   
-
-    addFlowerToOrder(flower:any){
-        var element = this.orderedFlowers.find(el=> el.id==flower.id)
-            if (element) {
-                element.qty+=1;
-                element.available=true;
-                } else {
-                    this.orderedFlowers.push(new Flower(flower.id,flower.name,flower.description,flower.price,1,true));
-                }
-                this.getTotallSum();
-        return this.orderedFlowers;
-    } 
-
-    removeFlower(id:any){
-        this.orderedFlowers.forEach((element, index) => {
-            if(element.id == id){
-                this.flowers.forEach(element1 => {
-                    if(element1.id == id){
-                        element1.qty+=1;
-                        if (element1.qty >0) {
-                            element1.available=true;
-                        }
-                    }
-                });
-                element.qty-=1; 
-                // this.totallPrice =this.totallPrice +  element.price*element.qty
-                if (element.qty <1) {
-                    this.orderedFlowers.splice(index,1)
-                }
-            }
-        });
-        return this.orderedFlowers;
-    }
-    getTotallSum(){
-        this.totallPrice = 0;
-        this.orderedFlowers.forEach(el=> {
-        this.totallPrice += el.price*el.qty
-        })
-        return this.totallPrice;
-    }
-    
+        element.fQty -= 1;
+        // this.totallPrice =this.totallPrice +  element.price*element.qty
+        if (element.fQty < 1) {
+          this.orderedFlowers.splice(index, 1);
+        }
+      }
+    });
+    return this.orderedFlowers;
+  }
+  getTotallSum() {
+    this.totallPrice = 0;
+    this.orderedFlowers.forEach((el) => {
+      this.totallPrice += el.fPrice * el.fQty;
+    });
+    return this.totallPrice;
+  }
 }

@@ -1,0 +1,26 @@
+<div class="alert flower-back container">
+  <form [formGroup]="myForm" (ngSubmit)="login()">
+    <div class="mb-2">
+      <label class="form-control link-style">Username</label>
+      <input type="text" class="form-control link-style" [formControl]="uid" />
+      <span
+        *ngIf="uid.valid == false && uid.touched"
+        class="alert alert-danger"
+      >
+        Username cannot be empty
+      </span>
+    </div>
+    <div class="mb-2 ">
+      <label class="form-control link-style">Password</label>
+      <input type="password" class="form-control  link-style" [formControl]="pass" />
+      <span
+        *ngIf="pass.valid == false && pass.touched"
+        class="alert alert-danger"
+      >
+        Password cannot be empty
+      </span>
+    </div>
+
+    <button class="btn btn-success">Login</button>
+  </form>
+</div>

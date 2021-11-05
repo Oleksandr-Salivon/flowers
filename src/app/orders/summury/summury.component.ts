@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Flower } from '../models/flowers';
-import { FlowerService } from '../services/avaliable-flowers.service';
+import { Flower } from '../../models/flowers';
+import { AvaliableFlowerService } from '../../services/avaliable-flowers.service';
 
 @Component({
   selector: 'app-summury',
@@ -15,7 +15,7 @@ export class SummuryComponent implements OnInit {
   flowers:Flower[];
   tmpFlower:Flower;
 
-  constructor(private flowerService:FlowerService) {
+  constructor(private flowerService:AvaliableFlowerService) {
     this.tmpFlower=new Flower();
     this.flower = new Flower();
     this.flowers = this.flowerService.getSummaryFlowers();
@@ -29,7 +29,7 @@ export class SummuryComponent implements OnInit {
    //return  this.flowerService.getTotallSum()
       var total:number = 0;
       this.flowers.forEach(element => {
-      total +=element.price*element.qty;
+      total +=element.fPrice*element.fQty;
      
    });
    return total;

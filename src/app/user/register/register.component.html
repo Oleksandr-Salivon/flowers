@@ -1,0 +1,47 @@
+<div class="alert flower-back">
+  <form [formGroup]="myForm" (ngSubmit)="register()">
+    <div class="mb-2">
+      <label class="form-control link-style">Username</label>
+      <input type="text" class="form-control link-style" [formControl]="uid" />
+      <span
+        *ngIf="uid.valid == false && uid.touched"
+        class="alert alert-danger"
+      >
+        Username cannot be empty
+      </span>
+    </div>
+    <div class="mb-2">
+      <label class="form-control link-style">Password</label>
+      <input type="password" class="form-control link-style" [formControl]="pass" />
+      <span
+        *ngIf="pass.valid == false && pass.touched"
+        class="alert alert-danger"
+      >
+        Password cannot be empty
+      </span>
+    </div>
+    <div class="mb-2">
+      <label class="form-control link-style" >Re-Type Password</label>
+      <input type="password" class="form-control link-style" [formControl]="repass" />
+      <span
+        *ngIf="confirmPass() == false && repass.touched"
+        class="alert alert-danger"
+      >
+      Passwords must match
+      </span>
+    </div>
+    <div class="mb-2 ">
+      <label class="form-control link-style">Email</label>
+      <input type="email" class="form-control link-style" [formControl]="email" ngModel email="true"  />
+    </div>
+    <div class="mb-2 ">
+      <label class="form-control link-style">Name</label>
+      <input type="text" class="form-control  link-style" [formControl]="uname" />
+      <span *ngIf="uname.errors && uname.touched" class="alert alert-danger">
+        <span *ngIf="uname.errors.required"> Name cannot be empty </span>
+        <span *ngIf="uname.errors.minlength"> Invalid entry for name </span>
+      </span>
+    </div>
+    <button class="btn btn-success">Register</button>
+  </form>
+</div>

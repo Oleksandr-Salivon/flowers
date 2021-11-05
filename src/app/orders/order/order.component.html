@@ -1,0 +1,557 @@
+<div class="container link-style">
+  <div class="row">
+    <div class="col-12">
+      <div
+        *ngIf="localStorageItem('token'); else AuthorizedMesage"
+        class="wrapper"
+      >
+        <hr />
+        <div class="link-style-text">New Orders</div>
+        <hr />
+        <div class="row d-flex justify-content-between">
+          <div
+            class="col-12 order-block"
+            *ngFor="let order of getOrders('processing')"
+          >
+            <div class="alert 
+            flower-back">
+              <div class="d-flex justify-content-between ml-5 mr-5">
+                <div>
+                  <span class="font-weight-bold"> Status : </span>
+                  {{ order.status }}
+                </div>
+                <div>
+                  <span class="font-weight-bold">Hello : </span
+                  >{{ customerNameObj.name }}
+                </div>
+                <div>
+                  <span class="font-weight-bold">orderId : </span
+                  >{{ order.orderId }}
+                </div>
+              </div>
+              <div class="d-flex row justify-content-center">
+                <div
+                  class="col-3 flower-block "
+                  *ngFor="let flowerOrder of getFlowerOrders(order.orderId)"
+                >
+                  <div class="alert 
+                  flower-back">
+                    <div>
+                      <span class="font-weight-bold">Flower ID : </span>
+                      {{ flowerOrder.fId }}
+                      <br />
+                    </div>
+                    <div>
+                      <span class="font-weight-bold">Flower Name : </span>
+                      {{ getName(flowerOrder.fId) }}
+                      <br />
+                    </div>
+                    <div>
+                      <span class="font-weight-bold">Order ID : </span
+                      >{{ flowerOrder.orderId }}
+                    </div>
+                    <div class="m-2 d-flex justify-content-between">
+                      <label class="form-control ">
+                        <span class="font-weight-bold">QTY : </span></label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        [(ngModel)]="flowerOrder.flowerPerOrederQty"
+                        (change)="changeQTY(flowerOrder)"
+                        min="1"
+                        [max]="getMaxQty(flowerOrder.fId)"
+                      />
+
+                      <br />
+                    </div>
+                    <div>
+                      <span class="font-weight-bold">Price : </span
+                      >{{ flowerOrder.flowerPerOrederPrice }}
+                      <br />
+                    </div>
+                    <div>
+                        <span class="font-weight-bold">Total Price of the bunch: </span
+                        >{{ flowerOrder.flowerPerOrederPrice*flowerOrder.flowerPerOrederQty }}
+                        <br />
+                      </div>
+                    <div>
+                      <button
+                        class="btn btn-primary"
+                        (click)="
+                          deleteFlowerOrder(
+                            flowerOrder.fId,
+                            flowerOrder.orderId
+                          )
+                        "
+                      >Delete Bunch</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center"> <span class="font-weight-bold">Total Price of order: </span> {{totalSumm}} </div>
+              <div class="row d-flex justify-content-around m-2">
+                <button
+                  class="btn btn-success"
+                  (click)="confirmOrder(order.orderId)"
+                >
+                  Confirm
+                </button>
+                
+                <div >
+                  <button
+                    class="btn btn-danger"
+                    (click)="deleteOrder(order.orderId)"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-template #AuthorizedMesage>
+        <div class="alert-danger">
+          <div>You are not logged in. Please log in to continue</div>
+        </div>
+      </ng-template>
+      <ng-template #content let-modal class="myModal modal-dialog-centered">
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">
+            Bouquet Id not unique
+          </h4>
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group alert-info">
+              <div>
+                Flower Id :
+                <input type="text" value="{{ flowerId }}" disabled />
+              </div>
+            </div>
+            <div class="form-group alert-info">
+              <div>
+                Flower Name :
+                <input type="text" [(ngModel)]="flowerName" name="flowerName" />
+              </div>
+            </div>
+            <div class="form-group alert-info">
+              <div>
+                Flower Description :
+                <input
+                  type="text"
+                  [(ngModel)]="flowerDescription"
+                  name="flowerDescription"
+                />
+              </div>
+            </div>
+            <div class="form-group alert-info">
+              <div>
+                Flower Price :
+                <input
+                  type="text"
+                  [(ngModel)]="flowerPrice"
+                  name="flowerPrice"
+                />
+              </div>
+            </div>
+            <div class="form-group alert-info">
+              <div>
+                Flower Qty :
+                <input type="text" [(ngModel)]="flowerQty" name="flowerQty" />
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-dark"
+            (click)="
+              putOrder(
+                flowerId,
+                flowerName,
+                flowerDescription,
+                flowerPrice,
+                flowerQty
+              )
+            "
+          >
+            Save
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="modal.close('Save click')"
+          >
+            Cancel
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<div class="container link-style">
+    <div class="row">
+      <div class="col-12">
+        <div
+          *ngIf="localStorageItem('token'); else AuthorizedMesage"
+          class="wrapper"
+        >
+          <hr />
+          <div class="link-style-text">Finished</div>
+          <hr />
+          <div class="row d-flex justify-content-between">
+            <div
+              class="col-12 order-block"
+              *ngFor="let order of getOrders('Successfull')"
+            >
+              <div class="alert flower-back">
+                <div class="d-flex justify-content-between ml-5 mr-5">
+                  <div>
+                    <span class="font-weight-bold"> Status : </span>
+                    {{ order.status }}
+                  </div>
+                  <div>
+                    <span class="font-weight-bold">Hello : </span
+                    >{{ customerNameObj.name }}
+                  </div>
+                  <div>
+                    <span class="font-weight-bold">orderId : </span
+                    >{{ order.orderId }}
+                  </div>
+                </div>
+                <div class="d-flex row justify-content-center">
+                  <div
+                    class="col-3 flower-block "
+                    *ngFor="let flowerOrder of getFlowerOrders(order.orderId)"
+                  >
+                    <div class="alert flower-back">
+                      <div>
+                        <span class="font-weight-bold">Flower ID : </span>
+                        {{ flowerOrder.fId }}
+                        <br />
+                      </div>
+                      <div>
+                        <span class="font-weight-bold">Flower Name : </span>
+                        {{ getName(flowerOrder.fId) }}
+                        <br />
+                      </div>
+                      <div>
+                        <span class="font-weight-bold">Order ID : </span
+                        >{{ flowerOrder.orderId }}
+                      </div>
+                      <div class="m-2 d-flex justify-content-between">
+                        <label class="form-control" >
+                          <span class="font-weight-bold">QTY : </span></label
+                        >
+                        <input
+                          type="text"
+                          disabled
+                          class="form-control"
+                          [(ngModel)]="flowerOrder.flowerPerOrederQty"
+                         
+                          min="1"
+                          [max]="getMaxQty(flowerOrder.fId)"
+                        />
+  
+                        <br />
+                      </div>
+                      <div>
+                        <span class="font-weight-bold">Price : </span
+                        >{{ flowerOrder.flowerPerOrederPrice }}
+                        <br />
+                      </div>
+                      <div>
+                          <span class="font-weight-bold">Total Price of the bunch: </span
+                          >{{ flowerOrder.flowerPerOrederPrice*flowerOrder.flowerPerOrederQty }}
+                          <br />
+                        </div>
+                      
+                    </div>
+                  </div>
+                </div>
+                <div class="text-center"> <span class="font-weight-bold">Total Price of order: </span> {{totalSumm}} </div>
+               
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #AuthorizedMesage>
+          <div class="alert-danger">
+            <div>You are not logged in. Please log in to continue</div>
+          </div>
+        </ng-template>
+        <ng-template #content let-modal class="myModal modal-dialog-centered">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">
+              Bouquet Id not unique
+            </h4>
+            <button
+              type="button"
+              class="close"
+              aria-label="Close"
+              (click)="modal.dismiss('Cross click')"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group alert-info">
+                <div>
+                  Flower Id :
+                  <input type="text" value="{{ flowerId }}" disabled />
+                </div>
+              </div>
+              <div class="form-group alert-info">
+                <div>
+                  Flower Name :
+                  <input type="text" [(ngModel)]="flowerName" name="flowerName" />
+                </div>
+              </div>
+              <div class="form-group alert-info">
+                <div>
+                  Flower Description :
+                  <input
+                    type="text"
+                    [(ngModel)]="flowerDescription"
+                    name="flowerDescription"
+                  />
+                </div>
+              </div>
+              <div class="form-group alert-info">
+                <div>
+                  Flower Price :
+                  <input
+                    type="text"
+                    [(ngModel)]="flowerPrice"
+                    name="flowerPrice"
+                  />
+                </div>
+              </div>
+              <div class="form-group alert-info">
+                <div>
+                  Flower Qty :
+                  <input type="text" [(ngModel)]="flowerQty" name="flowerQty" />
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-dark"
+              (click)="
+                putOrder(
+                  flowerId,
+                  flowerName,
+                  flowerDescription,
+                  flowerPrice,
+                  flowerQty
+                )
+              "
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="modal.close('Save click')"
+            >
+              Cancel
+            </button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  
+
+
+  <div class="container link-style">
+    <div class="row">
+      <div class="col-12">
+        <div
+          *ngIf="localStorageItem('token'); else AuthorizedMesage"
+          class="wrapper"
+        >
+          <hr />
+          <div class="link-style-text" >Canceled</div>
+          <hr />
+          <div class="row d-flex justify-content-between">
+            <div
+              class="col-12 order-block "
+              *ngFor="let order of getOrders('Canceled')"
+            >
+              <div class="alert flower-back">
+                <div class="d-flex justify-content-between ml-5 mr-5">
+                  <div>
+                    <span class="font-weight-bold"> Status : </span>
+                    {{ order.status }}
+                  </div>
+                  <div>
+                    <span class="font-weight-bold">Hello : </span
+                    >{{ customerNameObj.name }}
+                  </div>
+                  <div>
+                    <span class="font-weight-bold">orderId : </span
+                    >{{ order.orderId }}
+                  </div>
+                </div>
+                <div class="d-flex row justify-content-center">
+                  <div
+                    class="col-3 flower-block "
+                    *ngFor="let flowerOrder of getFlowerOrders(order.orderId)"
+                  >
+                    <div class="alert flower-back">
+                      <div>
+                        <span class="font-weight-bold">Flower ID : </span>
+                        {{ flowerOrder.fId }}
+                        <br />
+                      </div>
+                      <div>
+                        <span class="font-weight-bold">Flower Name : </span>
+                        {{ getName(flowerOrder.fId) }}
+                        <br />
+                      </div>
+                      <div>
+                        <span class="font-weight-bold">Order ID : </span
+                        >{{ flowerOrder.orderId }}
+                      </div>
+                      <div class="m-2 d-flex justify-content-between">
+                        <label class="form-control" >
+                          <span class="font-weight-bold">QTY : </span></label
+                        >
+                        <input
+                          type="text"
+                          disabled
+                          class="form-control"
+                          [(ngModel)]="flowerOrder.flowerPerOrederQty"
+                         
+                          min="1"
+                          [max]="getMaxQty(flowerOrder.fId)"
+                        />
+  
+                        <br />
+                      </div>
+                      <div>
+                        <span class="font-weight-bold">Price : </span
+                        >{{ flowerOrder.flowerPerOrederPrice }}
+                        <br />
+                      </div>
+                      <div>
+                          <span class="font-weight-bold">Total Price of the bunch: </span
+                          >{{ flowerOrder.flowerPerOrederPrice*flowerOrder.flowerPerOrederQty }}
+                          <br />
+                        </div>
+                      
+                    </div>
+                  </div>
+                </div>
+                <div class="text-center"> <span class="font-weight-bold">Total Price of order: </span> {{totalSumm}} </div>
+               
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #AuthorizedMesage>
+          <div class="alert-danger">
+            <div>You are not logged in. Please log in to continue</div>
+          </div>
+        </ng-template>
+        <ng-template #content let-modal class="myModal modal-dialog-centered">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">
+              Bouquet Id not unique
+            </h4>
+            <button
+              type="button"
+              class="close"
+              aria-label="Close"
+              (click)="modal.dismiss('Cross click')"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group alert-info">
+                <div>
+                  Flower Id :
+                  <input type="text" value="{{ flowerId }}" disabled />
+                </div>
+              </div>
+              <div class="form-group alert-info">
+                <div>
+                  Flower Name :
+                  <input type="text" [(ngModel)]="flowerName" name="flowerName" />
+                </div>
+              </div>
+              <div class="form-group alert-info">
+                <div>
+                  Flower Description :
+                  <input
+                    type="text"
+                    [(ngModel)]="flowerDescription"
+                    name="flowerDescription"
+                  />
+                </div>
+              </div>
+              <div class="form-group alert-info">
+                <div>
+                  Flower Price :
+                  <input
+                    type="text"
+                    [(ngModel)]="flowerPrice"
+                    name="flowerPrice"
+                  />
+                </div>
+              </div>
+              <div class="form-group alert-info">
+                <div>
+                  Flower Qty :
+                  <input type="text" [(ngModel)]="flowerQty" name="flowerQty" />
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-dark"
+              (click)="
+                putOrder(
+                  flowerId,
+                  flowerName,
+                  flowerDescription,
+                  flowerPrice,
+                  flowerQty
+                )
+              "
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="modal.close('Save click')"
+            >
+              Cancel
+            </button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+ 

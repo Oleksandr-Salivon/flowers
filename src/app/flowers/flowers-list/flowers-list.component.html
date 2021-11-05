@@ -1,0 +1,142 @@
+<div class="container flower-back">
+  <div class="row">
+    <div class="col-12">
+      <div *ngIf="localStorageItem('token'); else AuthorizedMesage" class="wrapper">
+        <div class="row d-flex justify-content-between">
+          <div
+            class="alert alert-info col-3 flower-block flower-back"
+            *ngFor="let flower of getFlowers()"
+          >
+            <div class="" >
+              Flower Id : {{ flower.fId }}
+              <br />
+              <span class="font-weight-bold">Flower Name : </span
+              >{{ flower.fName }}
+              <br />
+              <span class="font-weight-bold">Flower Description : </span
+              >{{ flower.fDescription }}
+              <br />
+              <span class="font-weight-bold">Flower Price : </span
+              >{{ flower.fPrice }}
+              <br />
+              <div >
+                <span class="font-weight-bold">Flower Qty : </span
+                ><span *ngIf="flower.fQty >= 0; else elseBlock"> {{ flower.fQty }}</span>
+                <br />
+
+              </div>
+              <div class="row d-flex justify-content-between m-2">
+                <button class="btn btn-success" (click)="addFlowerToOrder(flower)">
+                  AddToCart
+                </button>
+                <div *ngIf="name === 'Admin'">
+                  <button
+                    class="btn btn-primary"
+                    (click)="editFlower(content, flower)"
+                  >
+                    Edit
+                  </button>
+                </div>
+                <div *ngIf="name === 'Admin'">
+                  <button
+                    class="btn btn-danger"
+                    (click)="deleteFlower(flower.fId)"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #elseBlock>Out of stock</ng-template>
+      </div>
+      <ng-template #AuthorizedMesage>
+        <div class="alert-danger">
+          <div>You are not logged in. Please log in to continue</div>
+        </div>
+      </ng-template>
+      <ng-template #content let-modal class="myModal modal-dialog-centered">
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">
+            Bouquet Id not unique
+          </h4>
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group alert-info">
+              <div>
+                Flower Id :
+                <input type="text" value="{{ flowerId }}" disabled />
+              </div>
+            </div>
+            <div class="form-group alert-info">
+              <div>
+                Flower Name :
+                <input type="text" [(ngModel)]="flowerName" name="flowerName" />
+              </div>
+            </div>
+            <div class="form-group alert-info">
+              <div>
+                Flower Description :
+                <input
+                  type="text"
+                  [(ngModel)]="flowerDescription"
+                  name="flowerDescription"
+                />
+              </div>
+            </div>
+            <div class="form-group alert-info">
+              <div>
+                Flower Price :
+                <input
+                  type="text"
+                  [(ngModel)]="flowerPrice"
+                  name="flowerPrice"
+                />
+              </div>
+            </div>
+            <div class="form-group alert-info">
+              <div>
+                Flower Qty :
+                <input type="text" [(ngModel)]="flowerQty" name="flowerQty" />
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-dark"
+            (click)="
+              putFlower(
+                flowerId,
+                flowerName,
+                flowerDescription,
+                flowerPrice,
+                flowerQty
+              )
+            "
+          >
+            Save
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="modal.close('Save click')"
+          >
+            Cancel
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

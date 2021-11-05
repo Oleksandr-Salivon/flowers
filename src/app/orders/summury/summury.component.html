@@ -1,0 +1,19 @@
+<div class="wrapper alert alert-success">   
+    <div class="alert alert-info" *ngFor = "let flower of flowers">
+                <!-- <div *ngIf="flower.available "> -->
+                Flower Id : {{flower.fId}}
+                <br/>
+                Flower Name : {{flower.fName}}
+                <br/>
+                Flower Description : {{flower.fDescription}}
+                <br/>
+                Flower Price : {{flower.fPrice}}
+                <br/>
+                Flower Qty : {{flower.fQty}}
+                <br/>
+                <button class="btn btn-primary" (click)="removeFlower(flower.fId)">Remove</button>
+                <div> Price : {{flower.fQty*flower.fPrice}}</div>
+            </div>
+            <!-- </div> -->
+            <div >Totall Price : {{getPrice()}}</div>
+</div>
